@@ -77,8 +77,8 @@ project/
 1. **Clone or unzip the project**
 
    ```bash
-   git clone <your-repo-url>
-   cd project
+   git clone https://github.com/ritik4407gupta/cardia.git
+   cd flask
    ```
 
 2. **Create a virtual environment (recommended)**
