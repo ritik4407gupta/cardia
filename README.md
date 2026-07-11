@@ -40,7 +40,7 @@ layer has been rebuilt into a modern, responsive web experience.
 ## 📁 Folder Structure
 
 ```
-project/
+flask/
 │
 ├── app.py                  # Flask application & prediction endpoint
 ├── requirements.txt
