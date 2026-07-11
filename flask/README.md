@@ -36,19 +36,11 @@ layer has been rebuilt into a modern, responsive web experience.
 | Fonts      | Fraunces (display), Public Sans (body), IBM Plex Mono (data) |
 | Model      | K-Nearest Neighbours (`knn_heart_model.pkl`)        |
 
-## 📸 Screenshots
-
-> _Add screenshots of the hero section, assessment form, and result cards
-> here once deployed._
-
-| Hero | Assessment Form | Result |
-|------|------------------|--------|
-| `assets/screenshot-hero.png` | `assets/screenshot-form.png` | `assets/screenshot-result.png` |
 
 ## 📁 Folder Structure
 
 ```
-project/
+flask/
 │
 ├── app.py                  # Flask application & prediction endpoint
 ├── requirements.txt
