@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cardia — Heart Stroke Risk Assessment</title>
+  <meta name="description" content="A clinical-grade heart stroke risk screening tool powered by machine learning." />
+
+  <!-- Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <nav class="navbar navbar-expand-lg cardia-nav fixed-top">
+    <div class="container">
+      <a class="navbar-brand cardia-brand" href="#top">
+        <span class="cardia-brand-mark"><i class="bi bi-activity"></i></span>
+        Cardia
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav align-items-lg-center gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#assessment">Assessment</a></li>
+          <li class="nav-item"><a class="nav-link" href="#model">Model</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn cardia-btn-nav" href="#assessment">Start Screening</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header id="top" class="cardia-hero">
+    <div class="cardia-hero-bg"></div>
+    <div class="container position-relative">
+      <div class="row align-items-center gy-5">
+        <div class="col-lg-6">
+          <span class="cardia-eyebrow"><i class="bi bi-shield-plus"></i> Clinical decision-support tool</span>
+          <h1 class="cardia-h1">Know your heart's<br><em>rhythm of risk.</em></h1>
+          <p class="cardia-lead">
+            Cardia screens eleven cardiac and demographic signals through a trained
+            k-nearest-neighbours model to estimate your risk of heart disease —
+            in under a minute, right in your browser.
+          </p>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <a href="#assessment" class="btn cardia-btn-primary">
+              Begin Assessment <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            <a href="#about" class="btn cardia-btn-ghost">How it works</a>
+          </div>
+
+          <div class="cardia-stat-row mt-5">
+            <div class="cardia-stat">
+              <span class="cardia-stat-num">11</span>
+              <span class="cardia-stat-label">Clinical inputs</span>
+            </div>
+            <div class="cardia-stat-divider"></div>
+            <div class="cardia-stat">
+              <span class="cardia-stat-num">KNN</span>
+              <span class="cardia-stat-label">Model architecture</span>
+            </div>
+            <div class="cardia-stat-divider"></div>
+            <div class="cardia-stat">
+              <span class="cardia-stat-num">&lt;1s</span>
+              <span class="cardia-stat-label">Prediction time</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="cardia-monitor">
+            <div class="cardia-monitor-head">
+              <span class="cardia-monitor-dot"></span>
+              <span>Live Trace — Demo Patient</span>
+            </div>
+            <svg class="cardia-ekg" viewBox="0 0 600 160" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="0" y1="40" x2="600" y2="40" class="cardia-ekg-grid"></line>
+              <line x1="0" y1="80" x2="600" y2="80" class="cardia-ekg-grid"></line>
+              <line x1="0" y1="120" x2="600" y2="120" class="cardia-ekg-grid"></line>
+              <path class="cardia-ekg-trace" d="M0,80 L60,80 L75,80 L85,40 L95,120 L105,20 L115,100 L130,80 L200,80 L215,80 L225,40 L235,120 L245,20 L255,100 L270,80 L340,80 L355,80 L365,40 L375,120 L385,20 L395,100 L410,80 L480,80 L495,80 L505,40 L515,120 L525,20 L535,100 L550,80 L600,80" />
+            </svg>
+            <div class="cardia-monitor-foot">
+              <div>
+                <span class="cardia-monitor-val" id="demoHr">72</span>
+                <span class="cardia-monitor-unit">bpm</span>
+              </div>
+              <span class="cardia-monitor-tag">Reference waveform only</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="cardia-about">
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-md-4">
+          <div class="cardia-feature">
+            <i class="bi bi-clipboard2-pulse"></i>
+            <h3>Evidence-based inputs</h3>
+            <p>Every field mirrors validated cardiac risk indicators — chest pain type, ST slope, exercise-induced angina, and more.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="cardia-feature">
+            <i class="bi bi-cpu"></i>
+            <h3>Trained ML model</h3>
+            <p>A k-nearest-neighbours classifier, fit on standardized clinical data, powers every prediction you receive.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="cardia-feature">
+            <i class="bi bi-lock"></i>
+            <h3>Private by design</h3>
+            <p>Your inputs are used only to compute a prediction for this session — nothing is stored.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ASSESSMENT FORM ============ -->
+  <section id="assessment" class="cardia-assessment">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="cardia-eyebrow"><i class="bi bi-heart-pulse"></i> Risk Assessment</span>
+        <h2 class="cardia-h2">Enter your clinical details</h2>
+        <p class="cardia-section-lead">Fields are grouped the way a clinician would read a chart — profile, vitals, then diagnostic signs.</p>
+      </div>
+
+      <form id="predictForm" class="cardia-form" novalidate>
+
+        <!-- Patient Profile -->
+        <div class="cardia-panel">
+          <div class="cardia-panel-head">
+            <i class="bi bi-person-vcard"></i>
+            <div>
+              <h4>Patient Profile</h4>
+              <p>Basic demographic information</p>
+            </div>
+          </div>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label class="cardia-label" for="age">Age <span class="cardia-range-live" id="ageVal">{{ field_ranges.age[2] }}</span></label>
+              <input type="range" class="form-range cardia-range" id="age" name="age"
+                     min="{{ field_ranges.age[0] }}" max="{{ field_ranges.age[1] }}" value="{{ field_ranges.age[2] }}" step="1">
+              <div class="cardia-range-bounds"><span>{{ field_ranges.age[0] }}</span><span>{{ field_ranges.age[1] }}</span></div>
+            </div>
+            <div class="col-md-6">
+              <label class="cardia-label" for="sex">Sex</label>
+              <select class="form-select cardia-select" id="sex" name="sex" required>
+                {% for opt in sex_options %}
+                <option value="{{ opt }}">{{ 'Male' if opt == 'M' else 'Female' }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cardiac Vitals -->
+        <div class="cardia-panel">
+          <div class="cardia-panel-head">
+            <i class="bi bi-heart-pulse-fill"></i>
+            <div>
+              <h4>Cardiac Vitals</h4>
+              <p>Blood pressure, cholesterol, and heart rate readings</p>
+            </div>
+          </div>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label class="cardia-label" for="resting_bp">Resting Blood Pressure <span class="cardia-unit">mm Hg</span></label>
+              <input type="number" class="form-control cardia-input" id="resting_bp" name="resting_bp"
+                     min="{{ field_ranges.resting_bp[0] }}" max="{{ field_ranges.resting_bp[1] }}" value="{{ field_ranges.resting_bp[2] }}" required>
+              <div class="cardia-hint">Range: {{ field_ranges.resting_bp[0] }}–{{ field_ranges.resting_bp[1] }} mm Hg</div>
+            </div>
+            <div class="col-md-6">
+              <label class="cardia-label" for="cholesterol">Cholesterol <span class="cardia-unit">mg/dL</span></label>
+              <input type="number" class="form-control cardia-input" id="cholesterol" name="cholesterol"
+                     min="{{ field_ranges.cholesterol[0] }}" max="{{ field_ranges.cholesterol[1] }}" value="{{ field_ranges.cholesterol[2] }}" required>
+              <div class="cardia-hint">Range: {{ field_ranges.cholesterol[0] }}–{{ field_ranges.cholesterol[1] }} mg/dL</div>
+            </div>
+            <div class="col-md-6">
+              <label class="cardia-label" for="max_hr">Max Heart Rate <span class="cardia-range-live" id="maxHrVal">{{ field_ranges.max_hr[2] }}</span></label>
+              <input type="range" class="form-range cardia-range" id="max_hr" name="max_hr"
+                     min="{{ field_ranges.max_hr[0] }}" max="{{ field_ranges.max_hr[1] }}" value="{{ field_ranges.max_hr[2] }}" step="1">
+              <div class="cardia-range-bounds"><span>{{ field_ranges.max_hr[0] }}</span><span>{{ field_ranges.max_hr[1] }}</span></div>
+            </div>
+            <div class="col-md-6">
+              <label class="cardia-label" for="fasting_bs">Fasting Blood Sugar &gt; 120 mg/dL</label>
+              <select class="form-select cardia-select" id="fasting_bs" name="fasting_bs" required>
+                {% for opt in fasting_bs_options %}
+                <option value="{{ opt }}">{{ 'Yes' if opt == 1 else 'No' }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagnostic Signs -->
+        <div class="cardia-panel">
+          <div class="cardia-panel-head">
+            <i class="bi bi-clipboard2-pulse-fill"></i>
+            <div>
+              <h4>Diagnostic Signs</h4>
+              <p>Chest pain pattern, ECG reading, and exercise response</p>
+            </div>
+          </div>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label class="cardia-label" for="chest_pain">Chest Pain Type</label>
+              <select class="form-select cardia-select" id="chest_pain" name="chest_pain" required>
+                {% for opt in chest_pain_options %}
+                <option value="{{ opt }}">{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="cardia-label" for="resting_ecg">Resting ECG</label>
+              <select class="form-select cardia-select" id="resting_ecg" name="resting_ecg" required>
+                {% for opt in resting_ecg_options %}
+                <option value="{{ opt }}">{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="cardia-label" for="exercise_angina">Exercise-Induced Angina</label>
+              <select class="form-select cardia-select" id="exercise_angina" name="exercise_angina" required>
+                {% for opt in exercise_angina_options %}
+                <option value="{{ opt }}">{{ 'Yes' if opt == 'Y' else 'No' }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="cardia-label" for="st_slope">ST Slope</label>
+              <select class="form-select cardia-select" id="st_slope" name="st_slope" required>
+                {% for opt in st_slope_options %}
+                <option value="{{ opt }}">{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="cardia-label" for="oldpeak">Oldpeak <span class="cardia-unit">ST depression</span> <span class="cardia-range-live" id="oldpeakVal">{{ field_ranges.oldpeak[2] }}</span></label>
+              <input type="range" class="form-range cardia-range" id="oldpeak" name="oldpeak"
+                     min="{{ field_ranges.oldpeak[0] }}" max="{{ field_ranges.oldpeak[1] }}" value="{{ field_ranges.oldpeak[2] }}" step="0.1">
+              <div class="cardia-range-bounds"><span>{{ field_ranges.oldpeak[0] }}</span><span>{{ field_ranges.oldpeak[1] }}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="formError" class="cardia-error d-none">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span id="formErrorText">Please check your inputs.</span>
+        </div>
+
+        <div class="text-center mt-4">
+          <button type="submit" class="btn cardia-btn-predict" id="predictBtn">
+            <span class="btn-label"><i class="bi bi-heart-pulse me-2"></i>Predict My Risk</span>
+            <span class="btn-spinner d-none">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Analyzing…
+            </span>
+          </button>
+          <p class="cardia-disclaimer mt-3">
+            <i class="bi bi-info-circle"></i>
+            This tool is for educational purposes only and is not a substitute for professional medical advice.
+          </p>
+        </div>
+      </form>
+
+      <!-- ============ RESULT ============ -->
+      <div id="resultWrap" class="cardia-result-wrap mt-5 d-none">
+        <div id="resultCard" class="cardia-result">
+          <div class="cardia-result-icon">
+            <i id="resultIcon" class="bi"></i>
+          </div>
+          <h3 id="resultTitle">—</h3>
+          <p id="resultText">—</p>
+          <div id="resultProbWrap" class="cardia-prob d-none">
+            <div class="cardia-prob-bar"><div id="resultProbFill" class="cardia-prob-fill"></div></div>
+            <span id="resultProbLabel">—</span>
+          </div>
+          <a href="#assessment" id="resultRetry" class="btn cardia-btn-ghost mt-3">
+            <i class="bi bi-arrow-counterclockwise me-1"></i> Run another assessment
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODEL INFO ============ -->
+  <section id="model" class="cardia-model">
+    <div class="container">
+      <div class="row align-items-center gy-4">
+        <div class="col-lg-6">
+          <span class="cardia-eyebrow"><i class="bi bi-diagram-3"></i> Under the hood</span>
+          <h2 class="cardia-h2">A transparent, lightweight model</h2>
+          <p class="cardia-section-lead">
+            Cardia uses a <strong>K-Nearest Neighbours</strong> classifier trained on standardized
+            cardiac patient records. Inputs are scaled with the same
+            <code>StandardScaler</code> used during training, then compared against the
+            model's learned neighbourhood to classify risk as high or low.
+          </p>
+          <ul class="cardia-checklist">
+            <li><i class="bi bi-check-circle-fill"></i> Same feature engineering as the original research notebook</li>
+            <li><i class="bi bi-check-circle-fill"></i> Deterministic, reproducible preprocessing pipeline</li>
+            <li><i class="bi bi-check-circle-fill"></i> No data leaves your session</li>
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <div class="cardia-code-card">
+            <div class="cardia-code-head">
+              <span></span><span></span><span></span>
+              <span class="cardia-code-file">pipeline.py</span>
+            </div>
+            <pre class="cardia-code-body"><code>scaled = scaler.transform(input_df)
+prediction = model.predict(scaled)[0]
+
+risk = "High Risk" if prediction == 1 else "Low Risk"</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="cardia-footer">
+    <div class="container">
+      <div class="row gy-4 align-items-center">
+        <div class="col-md-6">
+          <a class="cardia-brand cardia-brand-footer" href="#top">
+            <span class="cardia-brand-mark"><i class="bi bi-activity"></i></span>
+            Cardia
+          </a>
+          <p class="mt-2">Machine-learning heart stroke risk screening.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-1">Built with Flask &amp; scikit-learn.</p>
+          <p class="cardia-footer-muted">For educational purposes only — not a medical diagnosis.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
